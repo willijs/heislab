@@ -5,7 +5,7 @@
 #include "driver/elevio.h"
 #include "FloorRequests.h"
 
-
+void initializeElevator(FloorRequests& requests);
 
 int main(){
     elevio_init();
@@ -14,13 +14,18 @@ int main(){
     printf("Press the stop button on the elevator panel to exit\n");
 
     FloorRequests requests;
-    int lastPosition = 1;
-    initializeFloorRequests(&requests);
+    int lastPosition = 0;
+    bool goingUp = true;
+    initializeElevator(&requests);
+
 
     while(1){
         int floor = elevio_floorSensor();
-        printf("Floor: %d, %d, %d, %d\n", requests.floor1,requests.floor2,requests.floor3,requests.floor4);
+        printf("Floor: %d\n", floor);
+        // printf("Floor: %d, %d, %d, %d\n", requests.floor1,requests.floor2,requests.floor3,requests.floor4);
+        // printf("Bool: %d\n", goingUp);
         /*
+        
         
         
 
@@ -36,9 +41,9 @@ setFloorRequests(&requests, 0, 0);
         for(int f = 0; f < N_FLOORS; f++){
             for(int b = 0; b < N_BUTTONS; b++){
                 int btnPressed = elevio_callButton(f, b);
-                //elevio_buttonLamp(f, b, btnPressed);
                 if (btnPressed) {
                     setFloorRequests(&requests, f, 1);
+                    elevio_buttonLamp(f, b, btnPressed);
                 }
             }
         }
@@ -47,57 +52,8 @@ setFloorRequests(&requests, 0, 0);
         lastPosition = floor;
         }
 
-        if (requests.floor1) {
-            if (floor == 0) {
-                elevio_motorDirection(DIRN_STOP);
-                setFloorRequests(&requests, 0, 0);
-            }
-            else {
-                elevio_motorDirection(DIRN_DOWN);
-            }
-        }
-        else if (requests.floor2) {
-            if (floor == 1) {
-                elevio_motorDirection(DIRN_STOP);
-                setFloorRequests(&requests, 1, 0);
-            }
-            else if (lastPosition > 1) {
-                elevio_motorDirection(DIRN_DOWN);
-            }
-             else if (lastPosition < 1) {
-                elevio_motorDirection(DIRN_UP);
-            }
-
-
-        }
-        else if (requests.floor3) {
-            if (floor == 2) {
-                elevio_motorDirection(DIRN_STOP);
-                setFloorRequests(&requests, 2, 0);
-            }
-            else if (lastPosition > 2) {
-                elevio_motorDirection(DIRN_DOWN);
-            }
-             else if (lastPosition < 2) {
-                elevio_motorDirection(DIRN_UP);
-            }
-
-        }
-        else if (requests.floor4) {
-            if (floor == 3) {
-                elevio_motorDirection(DIRN_STOP);
-                setFloorRequests(&requests, 3, 0);
-            }
-            else {
-                elevio_motorDirection(DIRN_UP);
-            }
-        }
-        else {
-            elevio_motorDirection(DIRN_STOP);
-        }
+        goingUp = BetterFloorQueue(&requests, floor, lastPosition, goingUp);
         
-        
-       
 
         if(elevio_obstruction()){
             elevio_stopLamp(1);
@@ -114,4 +70,12 @@ setFloorRequests(&requests, 0, 0);
     }
 
     return 0;
+}
+
+void initializeElevator(FloorRequests& requests) {
+    initializeFloorRequests(requests);
+    while (elevio_floorSensor() != 0) {
+        elevio_motorDirection(DIRN_DOWN);
+    }
+    elevio_motorDirection(DIRN_STOP);
 }
