@@ -5,7 +5,7 @@
 #include "driver/elevio.h"
 #include "FloorRequests.h"
 
-void initializeElevator(FloorRequests& requests);
+void initializeElevator(FloorRequests* requests);
 
 int main(){
     elevio_init();
@@ -72,7 +72,7 @@ setFloorRequests(&requests, 0, 0);
     return 0;
 }
 
-void initializeElevator(FloorRequests& requests) {
+void initializeElevator(FloorRequests* requests) {
     initializeFloorRequests(requests);
     while (elevio_floorSensor() != 0) {
         elevio_motorDirection(DIRN_DOWN);
