@@ -1,10 +1,15 @@
+#pragma once
 
-struct Door {
-    bool open;
-    bool obstructed;
-};
+#include <stdbool.h>
 
-void open_Door();
-void close_Door();
+// typedef struct {
+// //     bool open;
+// //     bool obstructed;
+// // } Door;
+
+void openDoor();
+void closeDoor();
+
+void openDoorSequence();
 
 
