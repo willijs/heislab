@@ -21,22 +21,26 @@ int main(){
 
     while(1){
         state.floor = elevio_floorSensor();
-        printf("Floor: %d\n", state.floor);
-        // printf("Floor: %d, %d, %d, %d\n", requests.floor1,requests.floor2,requests.floor3,requests.floor4);
+        //printf("Floor: %d\n", state.floor);
+        printf("Floor: %d, %d, %d, %d\n", requests.floor1,requests.floor2,requests.floor3,requests.floor4);
         // printf("Bool: %d\n", goingUp);
-        /*
         
-        
-        
-
-        if(state.floor == 0){
-            elevio_motorDirection(DIRN_UP);
-        }ce/ElevatorState.h:13:20: warning: expected ';' at end of declaration list
-    bool stopButton
-setFloorRequests(&requests, 0, 0);
-        if(state.floor == N_FLOORS-1){
-            elevio_motorDirection(DIRN_DOWN);
-        }*/
+        if(elevio_stopButton()){
+            if(!state.stopButton) {
+                for(int f = 0; f < N_FLOORS; f++){
+                    for(int b = 0; b < N_BUTTONS; b++){
+                    elevio_buttonLamp(f, b, 0);
+                    }
+                }
+            }
+            elevio_stopLamp(1);
+            elevio_motorDirection(DIRN_STOP);
+            initializeFloorRequests(&requests);
+            state.stopButton = true;
+        }
+        else {
+            elevio_stopLamp(0);
+            state.stopButton = false;
         
 
         for(int f = 0; f < N_FLOORS; f++){
@@ -60,13 +64,6 @@ setFloorRequests(&requests, 0, 0);
         } else {
         }
         
-        if(elevio_stopButton()){
-            elevio_stopLamp(1);
-            elevio_motorDirection(DIRN_STOP);
-            initializeFloorRequests(&requests);
-        }
-        else {
-            elevio_stopLamp(0);
         }
         nanosleep(&(struct timespec){0, 20*1000*1000}, NULL);
     }
