@@ -1,19 +1,19 @@
 #pragma once
+#include <time.h>
+#include <stdbool.h>
 
 typedef struct  {
-    int move;
-    int position;
-    int lastPosition;
+    int lastPos;
+    int floor;
+    bool move;
+    bool goingUp;
+    bool doorOpen;
+    long startTime;
+    bool obstruction;
+    bool stopButton;
 }ElevatorState;
 
-void checkValid(ElevatorState* state); //gi false dersom position == -1
+void initializeElevatorState(ElevatorState* state);
 
-void updatePosition(ElevatorState* state); //update position og last position
-
-void updateMove(ElevatorState* state); // -1 = ned, 0 = stille, 1 = opp
-
-//MotorDirection gjør dette allerede
-
-//oppstart?
 
 
