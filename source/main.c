@@ -27,7 +27,6 @@ int main(){
         /*
         
         
-        
 
         if(state.floor == 0){
             elevio_motorDirection(DIRN_UP);
@@ -49,16 +48,22 @@ setFloorRequests(&requests, 0, 0);
             }
         }
         if (state.floor >= 0) {
-        elevio_floorIndicator(state.floor);
-        state.lastPos = state.floor;
+            elevio_floorIndicator(state.floor);
+            state.lastPos = state.floor;
         }
-        //if (state.startTime +3 < time(NULL))
-        BetterFloorQueue(&requests, &state);
         
-
-        if(elevio_obstruction()){
-        } else {
+        state.obstruction = elevio_obstruction();
+       
+        if(state.obstruction && state.doorOpen){
+            openDoor(&state); 
         }
+        if(time(NULL) - state.startTime  > 3){ //så lenge det ikke har gått tre sekunder kaller vi på å utføre neste i køen
+            elevio_doorOpenLamp(0);
+            state.doorOpen = 0;
+            FloorQueue(&requests, &state); 
+        }
+
+        
         
         if(elevio_stopButton()){
             elevio_stopLamp(1);

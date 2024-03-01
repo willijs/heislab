@@ -59,7 +59,7 @@ void HelpFloorQueue(FloorRequests *req, ElevatorState *state, int setFloor) {
         for (int i = 0; i < 3; i++) {
             elevio_buttonLamp(state->floor, i, 0);
         }
-        //openDoor();
+        openDoor(state);
     }
     else if (state->lastPos > setFloor) { // add a check to see if the door is open
         elevio_motorDirection(DIRN_DOWN);
@@ -90,7 +90,7 @@ void HelpFloorQueue(FloorRequests *req, ElevatorState *state, int setFloor) {
 // }
 
 
-void BetterFloorQueue(FloorRequests *req, ElevatorState* state) {
+void FloorQueue(FloorRequests *req, ElevatorState* state) {
     if (state->goingUp) {
         if (state->floor == 0 && req->floor1){
             HelpFloorQueue(req, state, 0);

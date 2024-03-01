@@ -18,6 +18,4 @@ void initializeFloorRequests(FloorRequests *req);
 
 void HelpFloorQueue(FloorRequests *req, ElevatorState *state, int setFloor);
 
-// void FloorQueue(FloorRequests *req, int floor, int lastPosition);
-
-void BetterFloorQueue(FloorRequests *req, ElevatorState *state);
+void FloorQueue(FloorRequests *req, ElevatorState *state);
