@@ -21,8 +21,8 @@ int main(){
 
     while(1){
         state.floor = elevio_floorSensor();
-        //printf("Floor: %d\n", state.floor);
-        printf("Floor: %d, %d, %d, %d\n", requests.floor1,requests.floor2,requests.floor3,requests.floor4);
+        printf("Floor: %d\n", state.floor);
+        //printf("Floor: %d, %d, %d, %d\n", requests.floor1,requests.floor2,requests.floor3,requests.floor4);
         // printf("Bool: %d\n", goingUp);
         
         if(elevio_stopButton()){
@@ -33,14 +33,19 @@ int main(){
                     }
                 }
             }
+            if(state.floor != -1) {
+                openDoor(&state);
+            }
             elevio_stopLamp(1);
             elevio_motorDirection(DIRN_STOP);
             initializeFloorRequests(&requests);
             state.stopButton = true;
         }
         else {
+            if (state.stopButton) {
             elevio_stopLamp(0);
             state.stopButton = false;
+            }
         
 
         for(int f = 0; f < N_FLOORS; f++){
@@ -63,13 +68,15 @@ int main(){
             openDoor(&state); 
         }
         if(time(NULL) - state.startTime  > 3){ //så lenge det ikke har gått tre sekunder kaller vi på å utføre neste i køen
+            if(state.doorOpen) {
             elevio_doorOpenLamp(0);
             state.doorOpen = 0;
+            }
             FloorQueue(&requests, &state); 
         }
         
         }
-        nanosleep(&(struct timespec){0, 20*1000*1000}, NULL);
+        //nanosleep(&(struct timespec){0, 20*1000*1000}, NULL);
     }
 
     return 0;
