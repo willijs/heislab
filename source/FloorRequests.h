@@ -1,7 +1,9 @@
 #pragma once
-
+#include "ElevatorState.h"
 #include <stdbool.h>
 
+
+//Skulle vi byttet til en matrise?
 typedef struct {
     bool floor1;
     bool floor2;
@@ -10,12 +12,12 @@ typedef struct {
 } FloorRequests;
 
 void setFloorRequests(FloorRequests *req, int floor, bool value);
-bool getFloorRequests(FloorRequests *req, int floor);
+//bool getFloorRequests(FloorRequests *req, int floor);
 
 void initializeFloorRequests(FloorRequests *req);
 
-void HelpFloorQueue(FloorRequests *req, int floor, int lastPosition, int setFloor);
+void HelpFloorQueue(FloorRequests *req, ElevatorState *state, int setFloor);
 
 // void FloorQueue(FloorRequests *req, int floor, int lastPosition);
 
-bool BetterFloorQueue(FloorRequests *req, int floor, int lastPosition, bool goingUp);
+void BetterFloorQueue(FloorRequests *req, ElevatorState *state);

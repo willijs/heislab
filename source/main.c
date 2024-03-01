@@ -4,8 +4,9 @@
 #include <time.h>
 #include "driver/elevio.h"
 #include "FloorRequests.h"
+#include "ElevatorState.h"
 
-void initializeElevator(FloorRequests* requests);
+void initializeElevator(FloorRequests* requests, ElevatorState* state);
 
 int main(){
     elevio_init();
@@ -14,14 +15,13 @@ int main(){
     printf("Press the stop button on the elevator panel to exit\n");
 
     FloorRequests requests;
-    int lastPosition = 0;
-    bool goingUp = true;
-    initializeElevator(&requests);
+    ElevatorState state;
+    initializeElevator(&requests, &state);
 
 
     while(1){
-        int floor = elevio_floorSensor();
-        printf("Floor: %d\n", floor);
+        state.floor = elevio_floorSensor();
+        printf("Floor: %d\n", state.floor);
         // printf("Floor: %d, %d, %d, %d\n", requests.floor1,requests.floor2,requests.floor3,requests.floor4);
         // printf("Bool: %d\n", goingUp);
         /*
@@ -29,11 +29,12 @@ int main(){
         
         
 
-        if(floor == 0){
+        if(state.floor == 0){
             elevio_motorDirection(DIRN_UP);
-        }
+        }ce/ElevatorState.h:13:20: warning: expected ';' at end of declaration list
+    bool stopButton
 setFloorRequests(&requests, 0, 0);
-        if(floor == N_FLOORS-1){
+        if(state.floor == N_FLOORS-1){
             elevio_motorDirection(DIRN_DOWN);
         }*/
         
@@ -47,12 +48,12 @@ setFloorRequests(&requests, 0, 0);
                 }
             }
         }
-        if (floor >= 0) {
-        elevio_floorIndicator(floor);
-        lastPosition = floor;
+        if (state.floor >= 0) {
+        elevio_floorIndicator(state.floor);
+        state.lastPos = state.floor;
         }
-
-        goingUp = BetterFloorQueue(&requests, floor, lastPosition, goingUp);
+        //if (state.startTime +3 < time(NULL))
+        BetterFloorQueue(&requests, &state);
         
 
         if(elevio_obstruction()){
@@ -73,7 +74,8 @@ setFloorRequests(&requests, 0, 0);
     return 0;
 }
 
-void initializeElevator(FloorRequests* requests) {
+void initializeElevator(FloorRequests* requests, ElevatorState* state) {
+    initializeElevatorState(state);
     initializeFloorRequests(requests);
     while (elevio_floorSensor() != 0) {
         elevio_motorDirection(DIRN_DOWN);
