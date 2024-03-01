@@ -1,6 +1,8 @@
 #pragma once
 #include <time.h>
 #include <stdbool.h>
+#include "driver/elevio.h"
+#include <stdio.h>
 
 typedef struct  {
     int lastPos;
@@ -14,6 +16,11 @@ typedef struct  {
 }ElevatorState;
 
 void initializeElevatorState(ElevatorState* state);
+
+
+void openDoor(ElevatorState* state);
+
+
 
 
 
