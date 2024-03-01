@@ -56,16 +56,17 @@ setFloorRequests(&requests, 0, 0);
         
 
         if(elevio_obstruction()){
-            elevio_stopLamp(1);
         } else {
-            elevio_stopLamp(0);
         }
         
         if(elevio_stopButton()){
+            elevio_stopLamp(1);
             elevio_motorDirection(DIRN_STOP);
             initializeFloorRequests(&requests);
         }
-
+        else {
+            elevio_stopLamp(0);
+        }
         nanosleep(&(struct timespec){0, 20*1000*1000}, NULL);
     }
 
