@@ -6,7 +6,9 @@
 #include "FloorRequests.h"
 #include "ElevatorState.h"
 
-void initializeElevator(FloorRequests* requests, ElevatorState* state);
+
+void initializeElevator(ElevatorState* state);
+
 
 int main(){
     elevio_init();
@@ -14,14 +16,13 @@ int main(){
     printf("=== Example Program ===\n");
     printf("Press the stop button on the elevator panel to exit\n");
 
-    FloorRequests requests;
     ElevatorState state;
-    initializeElevator(&requests, &state);
+    initializeElevator(&state);
 
 
     while(1){
         state.floor = elevio_floorSensor();
-        printf("Floor: %d\n", state.floor);
+        //printf("Floor: %d\n", state.floor);
         //printf("Floor: %d, %d, %d, %d\n", requests.floor1,requests.floor2,requests.floor3,requests.floor4);
         // printf("Bool: %d\n", goingUp);
         
@@ -30,6 +31,7 @@ int main(){
                 for(int f = 0; f < N_FLOORS; f++){
                     for(int b = 0; b < N_BUTTONS; b++){
                     elevio_buttonLamp(f, b, 0);
+                    floorButtonMatrix[f][b] = 0;
                     }
                 }
             }
@@ -38,7 +40,6 @@ int main(){
             }
             elevio_stopLamp(1);
             elevio_motorDirection(DIRN_STOP);
-            initializeFloorRequests(&requests);
             state.stopButton = true;
         }
         else {
@@ -49,14 +50,18 @@ int main(){
         
 
         for(int f = 0; f < N_FLOORS; f++){
+            printf("\n");
             for(int b = 0; b < N_BUTTONS; b++){
                 int btnPressed = elevio_callButton(f, b);
+                printf("%d",floorButtonMatrix[f][b]);
                 if (btnPressed) {
-                    setFloorRequests(&requests, f, 1);
+                    floorButtonMatrix[f][b] = 1;
                     elevio_buttonLamp(f, b, btnPressed);
                 }
             }
         }
+        printf("\n");
+        printf("\n");
         if (state.floor >= 0) {
             elevio_floorIndicator(state.floor);
             state.lastPos = state.floor;
@@ -72,7 +77,7 @@ int main(){
             elevio_doorOpenLamp(0);
             state.doorOpen = 0;
             }
-            FloorQueue(&requests, &state); 
+            FloorQueue(&state); 
         }
         
         }
@@ -82,9 +87,8 @@ int main(){
     return 0;
 }
 
-void initializeElevator(FloorRequests* requests, ElevatorState* state) {
+void initializeElevator(ElevatorState* state) {
     initializeElevatorState(state);
-    initializeFloorRequests(requests);
     while (elevio_floorSensor() != 0) {
         elevio_motorDirection(DIRN_DOWN);
     }

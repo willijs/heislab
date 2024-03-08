@@ -4,18 +4,18 @@
 
 
 //Skulle vi byttet til en matrise?
-typedef struct {
-    bool floor1;
-    bool floor2;
-    bool floor3;
-    bool floor4;
-} FloorRequests;
+
+extern int floorButtonMatrix[N_FLOORS][N_BUTTONS];
+
+
+/*
 
 void setFloorRequests(FloorRequests *req, int floor, bool value);
 //bool getFloorRequests(FloorRequests *req, int floor);
 
 void initializeFloorRequests(FloorRequests *req);
+*/
 
-void HelpFloorQueue(FloorRequests *req, ElevatorState *state, int setFloor);
+void HelpFloorQueue(ElevatorState *state, int setFloor);
 
-void FloorQueue(FloorRequests *req, ElevatorState *state);
+void FloorQueue( ElevatorState *state);
