@@ -13,6 +13,7 @@ typedef struct  {
     long startTime;
     bool obstruction;
     bool stopButton;
+    int lastDirection;
 }ElevatorState;
 
 void initializeElevatorState(ElevatorState* state);

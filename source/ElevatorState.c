@@ -11,6 +11,7 @@ void initializeElevatorState(ElevatorState* state){
     state->startTime = time(NULL);
     state->obstruction = 0;
     state->stopButton = 0;
+    state->lastDirection = 0;
 }
 
 void openDoor(ElevatorState* state) {

@@ -24,7 +24,7 @@ int main(){
         state.floor = elevio_floorSensor();
         //printf("Floor: %d\n", state.floor);
         //printf("Floor: %d, %d, %d, %d\n", requests.floor1,requests.floor2,requests.floor3,requests.floor4);
-        // printf("Bool: %d\n", goingUp);
+        printf("Bool: %d\n", state.goingUp);
         
         if(elevio_stopButton()){
             if(!state.stopButton) {
@@ -34,6 +34,7 @@ int main(){
                     floorButtonMatrix[f][b] = 0;
                     }
                 }
+                state.lastDirection = state.goingUp;
             }
             if(state.floor != -1) {
                 openDoor(&state);
@@ -50,18 +51,17 @@ int main(){
         
 
         for(int f = 0; f < N_FLOORS; f++){
-            printf("\n");
+
             for(int b = 0; b < N_BUTTONS; b++){
                 int btnPressed = elevio_callButton(f, b);
-                printf("%d",floorButtonMatrix[f][b]);
+
                 if (btnPressed) {
                     floorButtonMatrix[f][b] = 1;
                     elevio_buttonLamp(f, b, btnPressed);
                 }
             }
         }
-        printf("\n");
-        printf("\n");
+
         if (state.floor >= 0) {
             elevio_floorIndicator(state.floor);
             state.lastPos = state.floor;
