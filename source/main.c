@@ -21,18 +21,12 @@ int main(){
 
     while(1){
         state.floor = elevio_floorSensor();
-        // printf("Bool: %d\n", state.goingUp);
         
-
         if(elevio_stopButton()){
             callStopButton(&state);
         }
         else {
-            if (state.stopButton) {
-            elevio_stopLamp(0);
-            state.stopButton = false;
-            }
-
+            stopLampOff(&state);
             checkButtonPresses();
             updateFloorIndicator(&state);
             checkForObstruction(&state);
@@ -40,7 +34,6 @@ int main(){
         
         }
     }
-
     return 0;
 }
 

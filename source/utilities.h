@@ -15,3 +15,5 @@ void checkForObstruction(ElevatorState* state);
 void callStopButton(ElevatorState* state);
 
 void checkCloseDoor(ElevatorState* state);
+
+void stopLampOff(ElevatorState* state);

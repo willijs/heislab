@@ -30,7 +30,7 @@ void checkForObstruction(ElevatorState* state) {
 }
 
 void callStopButton(ElevatorState* state) {
-    if(!state.stopButton) {
+    if(!state->stopButton) {
         for(int f = 0; f < N_FLOORS; f++){
             for(int b = 0; b < N_BUTTONS; b++){
                 elevio_buttonLamp(f, b, 0);
@@ -41,18 +41,25 @@ void callStopButton(ElevatorState* state) {
         state->stopButton = true;
     }
     if(state->floor != -1) {
-        openDoor(&state);
+        openDoor(state);
     }
     elevio_stopLamp(1);
     elevio_motorDirection(DIRN_STOP);
 }
 
 void checkCloseDoor(ElevatorState* state) {
-     if(time(NULL) - state.startTime  > 3){ //så lenge det ikke har gått tre sekunder kaller vi på å utføre neste i køen
-        if(state.doorOpen) {
+     if(time(NULL) - state->startTime  > 3){
+        if(state->doorOpen) {
             elevio_doorOpenLamp(0);
-            state.doorOpen = 0;
+            state->doorOpen = 0;
             }
-        FloorQueue(&state); 
+        FloorQueue(state); 
+    }
+}
+
+void stopLampOff(ElevatorState* state) {
+    if (state->stopButton) {
+        elevio_stopLamp(0);
+        state->stopButton = false;
     }
 }
