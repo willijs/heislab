@@ -16,7 +16,7 @@ void HelpFloorQueue(ElevatorState *state, int setFloor) {
         }
         openDoor(state);
     }
-    else if (state->lastPos > setFloor) { // add a check to see if the door is open
+    else if (state->lastPos > setFloor) { 
         elevio_motorDirection(DIRN_DOWN);
         state->goingUp = false;
     }
