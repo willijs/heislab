@@ -19,11 +19,8 @@ int main(){
     ElevatorState state;
     initializeElevator(&state);
 
-
     while(1){
         state.floor = elevio_floorSensor();
-        //printf("Floor: %d\n", state.floor);
-        //printf("Floor: %d, %d, %d, %d\n", requests.floor1,requests.floor2,requests.floor3,requests.floor4);
         printf("Bool: %d\n", state.goingUp);
         
         if(elevio_stopButton()){
@@ -81,7 +78,6 @@ int main(){
         }
         
         }
-        //nanosleep(&(struct timespec){0, 20*1000*1000}, NULL);
     }
 
     return 0;

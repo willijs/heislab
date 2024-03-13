@@ -16,9 +16,8 @@ typedef struct  {
     int lastDirection;
 }ElevatorState;
 
+
 void initializeElevatorState(ElevatorState* state);
-
-
 void openDoor(ElevatorState* state);
 
 
