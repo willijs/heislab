@@ -13,3 +13,10 @@ void checkButtonPresses() {
         }
     }
 }
+
+void updateFloorIndicator(ElevatorState* state) {
+     if (state->floor >= 0) {
+            elevio_floorIndicator(state->floor);
+            state->lastPos = state->floor;
+    }
+}

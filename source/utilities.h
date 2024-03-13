@@ -7,3 +7,5 @@
 
 
 void checkButtonPresses();
+
+void updateFloorIndicator(ElevatorState* state);

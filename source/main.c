@@ -46,25 +46,10 @@ int main(){
             elevio_stopLamp(0);
             state.stopButton = false;
             }
-        
 
-        for(int f = 0; f < N_FLOORS; f++){
+            checkButtonPresses();
+            updateFloorIndicator(&state);
 
-            for(int b = 0; b < N_BUTTONS; b++){
-                int btnPressed = elevio_callButton(f, b);
-
-                if (btnPressed) {
-                    floorButtonMatrix[f][b] = 1;
-                    elevio_buttonLamp(f, b, btnPressed);
-                }
-            }
-        }
-
-        if (state.floor >= 0) {
-            elevio_floorIndicator(state.floor);
-            state.lastPos = state.floor;
-        }
-        
         state.obstruction = elevio_obstruction();
        
         if(state.obstruction && state.doorOpen){
