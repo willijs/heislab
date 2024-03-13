@@ -49,12 +49,9 @@ int main(){
 
             checkButtonPresses();
             updateFloorIndicator(&state);
+            checkForObstruction(&state);
 
-        state.obstruction = elevio_obstruction();
-       
-        if(state.obstruction && state.doorOpen){
-            openDoor(&state); 
-        }
+    
         if(time(NULL) - state.startTime  > 3){ //så lenge det ikke har gått tre sekunder kaller vi på å utføre neste i køen
             if(state.doorOpen) {
             elevio_doorOpenLamp(0);

@@ -9,3 +9,5 @@
 void checkButtonPresses();
 
 void updateFloorIndicator(ElevatorState* state);
+
+void checkForObstruction(ElevatorState* state);

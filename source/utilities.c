@@ -20,3 +20,11 @@ void updateFloorIndicator(ElevatorState* state) {
             state->lastPos = state->floor;
     }
 }
+
+void checkForObstruction(ElevatorState* state) {
+        state->obstruction = elevio_obstruction();
+       
+        if(state->obstruction && state->doorOpen){
+            openDoor(state); 
+        }
+}
