@@ -4,10 +4,11 @@
 #include "driver/elevio.h"
 #include <stdio.h>
 
+
+
 typedef struct  {
     int lastPos;
     int floor;
-    bool move;
     bool goingUp;
     bool doorOpen;
     long startTime;
@@ -18,6 +19,7 @@ typedef struct  {
 
 
 void initializeElevatorState(ElevatorState* state);
+void initializeElevator(ElevatorState* state);
 void openDoor(ElevatorState* state);
 
 

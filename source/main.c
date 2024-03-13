@@ -5,9 +5,9 @@
 #include "driver/elevio.h"
 #include "FloorRequests.h"
 #include "ElevatorState.h"
+#include "utilities.h"
 
 
-void initializeElevator(ElevatorState* state);
 
 
 int main(){
@@ -20,6 +20,7 @@ int main(){
     initializeElevator(&state);
 
     while(1){
+
         state.floor = elevio_floorSensor();
         printf("Bool: %d\n", state.goingUp);
         
@@ -83,10 +84,3 @@ int main(){
     return 0;
 }
 
-void initializeElevator(ElevatorState* state) {
-    initializeElevatorState(state);
-    while (elevio_floorSensor() != 0) {
-        elevio_motorDirection(DIRN_DOWN);
-    }
-    elevio_motorDirection(DIRN_STOP);
-}
