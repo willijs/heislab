@@ -20,10 +20,10 @@ int main(){
     initializeElevator(&state);
 
     while(1){
-
         state.floor = elevio_floorSensor();
-        printf("Bool: %d\n", state.goingUp);
+        // printf("Bool: %d\n", state.goingUp);
         
+
         if(elevio_stopButton()){
             callStopButton(&state);
         }
@@ -36,15 +36,7 @@ int main(){
             checkButtonPresses();
             updateFloorIndicator(&state);
             checkForObstruction(&state);
-
-    
-        if(time(NULL) - state.startTime  > 3){ //så lenge det ikke har gått tre sekunder kaller vi på å utføre neste i køen
-            if(state.doorOpen) {
-            elevio_doorOpenLamp(0);
-            state.doorOpen = 0;
-            }
-            FloorQueue(&state); 
-        }
+            checkCloseDoor(&state);
         
         }
     }

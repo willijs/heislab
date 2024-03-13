@@ -13,3 +13,5 @@ void updateFloorIndicator(ElevatorState* state);
 void checkForObstruction(ElevatorState* state);
 
 void callStopButton(ElevatorState* state);
+
+void checkCloseDoor(ElevatorState* state);

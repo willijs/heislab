@@ -46,3 +46,13 @@ void callStopButton(ElevatorState* state) {
     elevio_stopLamp(1);
     elevio_motorDirection(DIRN_STOP);
 }
+
+void checkCloseDoor(ElevatorState* state) {
+     if(time(NULL) - state.startTime  > 3){ //så lenge det ikke har gått tre sekunder kaller vi på å utføre neste i køen
+        if(state.doorOpen) {
+            elevio_doorOpenLamp(0);
+            state.doorOpen = 0;
+            }
+        FloorQueue(&state); 
+    }
+}
