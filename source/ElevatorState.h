@@ -20,7 +20,7 @@ typedef struct  {
 
 void initializeElevatorState(ElevatorState* state);
 void initializeElevator(ElevatorState* state);
-void openDoor(ElevatorState* state);
+
 
 
 

@@ -3,9 +3,9 @@
 #include <signal.h>
 #include <time.h>
 #include "driver/elevio.h"
-#include "FloorRequests.h"
 #include "ElevatorState.h"
-#include "utilities.h"
+#include "StopButton.h"
+#include "Door.h"
 
 
 
@@ -24,6 +24,7 @@ int main(){
         
         if(elevio_stopButton()){
             callStopButton(&state);
+
         }
         else {
             stopLampOff(&state);
@@ -31,7 +32,6 @@ int main(){
             updateFloorIndicator(&state);
             checkForObstruction(&state);
             checkCloseDoor(&state);
-        
         }
     }
     return 0;

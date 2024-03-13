@@ -1,13 +1,10 @@
 #include "FloorRequests.h"
-#include "driver/elevio.h"
-#include <stdio.h>
-#include "ElevatorState.h"
 
 
 int floorButtonMatrix[N_FLOORS][N_BUTTONS] = {0};
 
 
-void HelpFloorQueue(ElevatorState *state, int setFloor) {
+void executeOrder(ElevatorState *state, int setFloor) {
      if (state->floor == setFloor) {
         elevio_motorDirection(DIRN_STOP);
         for (int i = 0; i < 3; i++) {
@@ -37,7 +34,7 @@ void HelpFloorQueue(ElevatorState *state, int setFloor) {
 
 
 
-void FloorQueue(ElevatorState* state) {
+void floorQueue(ElevatorState* state) {
 
     if (state->goingUp) {
         for (int i = state->lastPos; i < 4; i++) {
@@ -45,44 +42,43 @@ void FloorQueue(ElevatorState* state) {
                 if (i == state->lastPos && state->floor == -1) {
                     continue;
                 }
-                HelpFloorQueue(state, i);
+                executeOrder(state, i);
                 return;
             }
         }
         for (int i = 3; i > -1 ; i--) {
             if ((floorButtonMatrix[i][1] || floorButtonMatrix[i][2])) {
-                HelpFloorQueue(state, i);
+                executeOrder(state, i);
                 return;
             }
         }
         for (int i = 0; i < 4; i++) {
             if ((floorButtonMatrix[i][0])) {
-                HelpFloorQueue(state, i);
+                executeOrder(state, i);
                 return;
             }
         }
     }
 
-  
     else {
         for (int i = state->lastPos; i >= 0; i--) {
             if ((floorButtonMatrix[i][1] || floorButtonMatrix[i][2])) {
                 if (i == state->lastPos && state->floor == -1) {
                     continue;
                 }
-                HelpFloorQueue(state, i);
+                executeOrder(state, i);
                 return;
             }
         }
         for (int i = 0; i <= 3 ; i++) {
             if ((floorButtonMatrix[i][0] || floorButtonMatrix[i][2])) {
-                HelpFloorQueue(state, i);
+                executeOrder(state, i);
                 return;
             }
         }
         for (int i = 3; i >= 0 ; i--) {
             if ((floorButtonMatrix[i][1] || floorButtonMatrix[i][2])) {
-                HelpFloorQueue(state, i);
+                executeOrder(state, i);
                 return;
             }
         }
@@ -90,3 +86,22 @@ void FloorQueue(ElevatorState* state) {
     }
 }
 
+
+void updateFloorIndicator(ElevatorState* state) {
+     if (state->floor >= 0) {
+            elevio_floorIndicator(state->floor);
+            state->lastPos = state->floor;
+    }
+}
+
+void checkButtonPresses() {
+    for(int f = 0; f < N_FLOORS; f++){
+        for(int b = 0; b < N_BUTTONS; b++){
+            int btnPressed = elevio_callButton(f, b);
+            if (btnPressed) {
+                floorButtonMatrix[f][b] = 1;
+                elevio_buttonLamp(f, b, btnPressed);
+            }
+        }
+    }
+}
