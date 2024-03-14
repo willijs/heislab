@@ -3,6 +3,7 @@
 
 
 void checkForObstruction(ElevatorState* state) {
+    //Checks for obstructions, and keeps the door open if obstructed
     state->obstruction = elevio_obstruction();
     
     if(state->obstruction && state->doorOpen){
@@ -11,6 +12,7 @@ void checkForObstruction(ElevatorState* state) {
 }
 
 void checkCloseDoor(ElevatorState* state) {
+    //Checks when the door should close, and requests a new order after door is closed
      if(time(NULL) - state->startTime  > 3){
         if(state->doorOpen) {
             elevio_doorOpenLamp(0);
@@ -22,8 +24,9 @@ void checkCloseDoor(ElevatorState* state) {
 
 
 void openDoor(ElevatorState* state) {
+    //Opens the door if not between floors, and starts a 3 second timer
     if(state->floor == -1){
-        printf("Prøver å åpne døren mellom etasjer");
+        printf("Trying to open the door while between floors!");
         return;
     }
     state->doorOpen = 1;

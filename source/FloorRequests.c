@@ -1,10 +1,12 @@
 #include "FloorRequests.h"
 
-
+//Our matrix which contains all the elevator buttons
 int floorButtonMatrix[N_FLOORS][N_BUTTONS] = {0};
 
 
+
 void executeOrder(ElevatorState *state, int setFloor) {
+    //Decides whether to stop and open the door, go up or go down, depending on where the elevator is compared to the order
      if (state->floor == setFloor) {
         elevio_motorDirection(DIRN_STOP);
         for (int i = 0; i < 3; i++) {
@@ -22,6 +24,7 @@ void executeOrder(ElevatorState *state, int setFloor) {
         state->goingUp = true;
     }
     else{
+        //Used to decide where to move if stopped between two floors
         if (state->lastDirection) {
                 elevio_motorDirection(DIRN_DOWN);
 
@@ -35,7 +38,7 @@ void executeOrder(ElevatorState *state, int setFloor) {
 
 
 void floorQueue(ElevatorState* state) {
-
+    //If the elevator is going up, it first checks if anyone wants to go to the floors above it, and continue upwards
     if (state->goingUp) {
         for (int i = state->lastPos; i < 4; i++) {
             if ((floorButtonMatrix[i][0] || floorButtonMatrix[i][2])) {
@@ -46,12 +49,14 @@ void floorQueue(ElevatorState* state) {
                 return;
             }
         }
+        //else it checks if anyone wants to go to any floors, but downwards
         for (int i = 3; i > -1 ; i--) {
             if ((floorButtonMatrix[i][1] || floorButtonMatrix[i][2])) {
                 executeOrder(state, i);
                 return;
             }
         }
+        //else it checks if anyone wants to go to the floors below, and upwards
         for (int i = 0; i < 4; i++) {
             if ((floorButtonMatrix[i][0])) {
                 executeOrder(state, i);
@@ -61,6 +66,7 @@ void floorQueue(ElevatorState* state) {
     }
 
     else {
+        //If going down, check if anyone wants to go to floors below, and continue downwards
         for (int i = state->lastPos; i >= 0; i--) {
             if ((floorButtonMatrix[i][1] || floorButtonMatrix[i][2])) {
                 if (i == state->lastPos && state->floor == -1) {
@@ -69,6 +75,7 @@ void floorQueue(ElevatorState* state) {
                 executeOrder(state, i);
                 return;
             }
+        //Else it checks if anyone wants to go to any floor, but upwards
         }
         for (int i = 0; i <= 3 ; i++) {
             if ((floorButtonMatrix[i][0] || floorButtonMatrix[i][2])) {
@@ -76,6 +83,7 @@ void floorQueue(ElevatorState* state) {
                 return;
             }
         }
+        //else it checks if anyone wants to go to floors above, and continue downwards
         for (int i = 3; i >= 0 ; i--) {
             if ((floorButtonMatrix[i][1] || floorButtonMatrix[i][2])) {
                 executeOrder(state, i);
@@ -88,6 +96,7 @@ void floorQueue(ElevatorState* state) {
 
 
 void updateFloorIndicator(ElevatorState* state) {
+    //Updates the floorIndicator and lastPosition, if on a floor
      if (state->floor >= 0) {
             elevio_floorIndicator(state->floor);
             state->lastPos = state->floor;
@@ -95,6 +104,7 @@ void updateFloorIndicator(ElevatorState* state) {
 }
 
 void checkButtonPresses() {
+    //Iterates through all the buttons and check if they are pressed. Saves the result in a matrix
     for(int f = 0; f < N_FLOORS; f++){
         for(int b = 0; b < N_BUTTONS; b++){
             int btnPressed = elevio_callButton(f, b);

@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 
-
+//A struct which contains every state that is needed for the elevator to function
 typedef struct  {
     int lastPos;
     int floor;

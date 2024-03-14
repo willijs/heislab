@@ -3,6 +3,7 @@
 
 
 void initializeElevatorState(ElevatorState* state){
+    //Initializes all of the states
     state->floor = 0;
     state->lastPos = 0;
     state->goingUp = 1;
@@ -16,6 +17,7 @@ void initializeElevatorState(ElevatorState* state){
 
 
 void initializeElevator(ElevatorState* state) {
+    //Moves the elevator to a defined position (floor 1)
     initializeElevatorState(state);
     while (elevio_floorSensor() != 0) {
         elevio_motorDirection(DIRN_DOWN);

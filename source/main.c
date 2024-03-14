@@ -20,8 +20,10 @@ int main(){
     initializeElevator(&state);
 
     while(1){
+        //Retrieves the current floor
         state.floor = elevio_floorSensor();
         
+        //Checks if the stopbutton is called, and stops normal operation if it is
         if(elevio_stopButton()){
             callStopButton(&state);
 
