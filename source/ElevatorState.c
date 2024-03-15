@@ -17,6 +17,12 @@ void initializeElevatorState(ElevatorState* state){
 
 
 void initializeElevator(ElevatorState* state) {
+    //Turns of all buttonlamps
+     for(int f = 0; f < N_FLOORS; f++){
+        for(int b = 0; b < N_BUTTONS; b++){
+            elevio_buttonLamp(f, b, 0);
+        }
+     }
     //Moves the elevator to a defined position (floor 1)
     initializeElevatorState(state);
     while (elevio_floorSensor() != 0) {
